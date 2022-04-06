@@ -1,0 +1,22 @@
+<idea-plugin>
+    <id>itmo</id>
+    <name>Pascal</name>
+
+    <description><![CDATA[
+      Pascal language support for IntelliJ IDEA.
+    ]]></description>
+    <vendor>itmo</vendor>
+
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="Pascal" language="Pascal" implementationClass="com.itmo.pascal.lang.PascalFileType" extensions="pas" fieldName="INSTANCE"/>
+		
+		
+        <lang.syntaxHighlighterFactory language="Pascal" implementationClass="com.itmo.pascal.ide.PascalSyntaxHighlighterFactory"/>
+		<colorSettingsPage implementation="com.itmo.pascal.ide.PascalColorSettingsPage"/>
+
+
+	</extensions>
+
+</idea-plugin>
