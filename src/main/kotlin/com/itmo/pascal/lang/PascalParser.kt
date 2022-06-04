@@ -55,7 +55,14 @@ import com.intellij.psi.tree.TokenSet
  *   | 'PROCEDURE' IDENTIFIER ';' BLOCK ';'
  *
  * FUNCTION_DECLARATION_PART:
- *   | 'FUNCTION' IDENTIFIER ';' BLOCK ';'
+ *   | 'FUNCTION' IDENTIFIER '(' FUNCTION_VARIABLE_LIST ')' ':' TYPE ';' BLOCK ';'
+ *
+ * FUNCTION_VARIABLE_LIST:
+ *   | FUNCTION_VARIABLE ';' FUNCTION_VARIABLE_LIST
+ *   | FUNCTION_VARIABLE
+ *
+ * FUNCTION_VARIABLE:
+ *   | IDENTIFIER ':' TYPE ('=' EXPRESSION)?
  *
  * VARIABLE_DECLARATION_PART:
  *   | 'VAR' VARIABLE_DECLARATION_LIST
@@ -345,10 +352,37 @@ class PascalParser : PsiParser {
 
             expectAdvance(PascalTokenType.FUNCTION, "FUNCTION")
             expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+
+            expectAdvance(PascalTokenType.LPAREN, "(")
+            parseFunctionVariableList()
+            expectAdvance(PascalTokenType.RPAREN, ")")
+
+            expectAdvance(PascalTokenType.COLON, ":")
+            parseType()
             expectAdvance(PascalTokenType.SEMICOLON, ";")
+
             parseBlock()
+            expectAdvance(PascalTokenType.SEMICOLON, ";")
 
             mark.done(PascalElementType.FUNCTION_DECLARATION)
+        }
+
+        private fun parseFunctionVariable() {
+            val mark = builder.mark()
+
+            expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+            expectAdvance(PascalTokenType.COLON, ":")
+            parseType()
+
+            mark.done(PascalElementType.VARIABLE_DECLARATION)
+        }
+
+        private fun parseFunctionVariableList() {
+            parseFunctionVariable()
+            while (builder.tokenType == PascalTokenType.SEMICOLON) {
+                expectAdvance(PascalTokenType.SEMICOLON, ";")
+                parseFunctionVariable()
+            }
         }
 
         private fun parseProcedureDeclaration() {
@@ -357,7 +391,9 @@ class PascalParser : PsiParser {
             expectAdvance(PascalTokenType.PROCEDURE, "PROCEDURE")
             expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
             expectAdvance(PascalTokenType.SEMICOLON, ";")
+
             parseBlock()
+            expectAdvance(PascalTokenType.SEMICOLON, ";")
 
             mark.done(PascalElementType.PROCEDURE_DECLARATION)
         }
@@ -397,11 +433,7 @@ class PascalParser : PsiParser {
             }
         }
 
-        private fun parseVariableDeclaration() {
-            val mark = builder.mark()
-
-            expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
-            expectAdvance(PascalTokenType.COLON, ":")
+        private fun parseType() {
             when (builder.tokenType) {
                 PascalTokenType.INTEGER -> expectAdvance(PascalTokenType.INTEGER, "INTEGER")
                 PascalTokenType.REAL -> expectAdvance(PascalTokenType.REAL, "REAL")
@@ -409,6 +441,14 @@ class PascalParser : PsiParser {
                 PascalTokenType.CHAR -> expectAdvance(PascalTokenType.CHAR, "CHAR")
                 else -> errorAdvance("INTEGER, REAL, BOOLEAN, CHAR")
             }
+        }
+
+        private fun parseVariableDeclaration() {
+            val mark = builder.mark()
+
+            expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+            expectAdvance(PascalTokenType.COLON, ":")
+            parseType()
             if (builder.tokenType == PascalTokenType.EQ) {
                 expectAdvance(PascalTokenType.EQ, "EQ")
                 parseExpression()

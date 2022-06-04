@@ -8,27 +8,30 @@ cat : CHAR = 'c';
 dog : BOOLEAN = 1;
 length : REAL;
 
-FUNCTION f;
+FUNCTION f(a : INTEGER) : CHAR;
 BEGIN
    IF a = 6 THEN b := 7
-END
+END;
 
-FUNCTION h;
+FUNCTION h(a : INTEGER; b : REAL) : CHAR;
 BEGIN
    f(9);
    IF j < 10 THEN f(9) ELSE f(0)
-END
+END;
 
 BEGIN
     f(8, 9);
     Writeln('cats');
 
     FOR i := 1 TO 10
-    DO Writeln(i);
+    DO BEGIN
+            Writeln(i);
+            i /= 5
+       END;
 
     FOR i := 10 DOWNTO 1
     DO REPEAT
             h('cats');
-            a += 7
+            a += 7 * 9 AND 10
        UNTIL g <= 1
 END.
