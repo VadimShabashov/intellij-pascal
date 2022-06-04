@@ -466,7 +466,7 @@ class PascalParser : PsiParser {
             val mark = builder.mark()
 
             parseTerm()
-            if (builder.tokenType in PascalTokenType.TERM_OPERATORS) {
+            while (builder.tokenType in PascalTokenType.TERM_OPERATORS) {
                 parseTermOperator()
                 parseTerm()
             }
@@ -499,7 +499,7 @@ class PascalParser : PsiParser {
             val mark = builder.mark()
 
             parseFactor()
-            if (builder.tokenType in PascalTokenType.FACTOR_OPERATORS) {
+            while (builder.tokenType in PascalTokenType.FACTOR_OPERATORS) {
                 parseFactorOperator()
                 parseFactor()
             }
@@ -551,7 +551,7 @@ class PascalParser : PsiParser {
                 PascalTokenType.LPAREN -> {
                     expectAdvance(PascalTokenType.LPAREN, "(")
                     parseExpression()
-                    expectAdvance(PascalTokenType.LPAREN, ")")
+                    expectAdvance(PascalTokenType.RPAREN, ")")
                 }
                 PascalTokenType.PLUS -> {
                     expectAdvance(PascalTokenType.PLUS, "+")

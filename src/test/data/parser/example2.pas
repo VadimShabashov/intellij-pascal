@@ -13,10 +13,11 @@ END
 
 BEGIN
     s := 0;
-    WHILE s < 10
+    g;
+    WHILE (s < 10)
     DO
         BEGIN
-            REPEAT s := s + 1
-            UNTIL s > 0
+            REPEAT s := s AND (6 * 7);
+            UNTIL (s > 0)
         END
 END.

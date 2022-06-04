@@ -3,9 +3,9 @@ PROGRAM Example1(i1, i2);
 LABEL a, b;
 
 BEGIN
-    IF a = 0
-    THEN c := 5
+    IF (a = 0)
+    THEN c := (5 + a) * b
     ELSE IF b < 0
-         THEN c := 8
-         ELSE c := 10
+         THEN c := 8 * 6 + (5 + 3) * (6 AND 9)
+         ELSE c := 7 OR (6 + 8)
 END.
