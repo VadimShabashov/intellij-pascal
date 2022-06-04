@@ -20,9 +20,8 @@ import com.itmo.pascal.lang.PascalTokenType
 
 enum class PascalTextAttributeKeys(humanName: String, fallback: TextAttributesKey) {
     COMMENT("Comment", DefaultLanguageHighlighterColors.DOC_COMMENT),
-    STRING("String text", DefaultLanguageHighlighterColors.STRING),
-    INT("Decimal", DefaultLanguageHighlighterColors.NUMBER),
-    HEX("Hexadecimal", DefaultLanguageHighlighterColors.NUMBER),
+    STRING("String", DefaultLanguageHighlighterColors.STRING),
+    INT("Unsigned number", DefaultLanguageHighlighterColors.NUMBER),
 
     DOT("Dot", DefaultLanguageHighlighterColors.DOT),
     COMMA("Comma", DefaultLanguageHighlighterColors.COMMA),
@@ -30,15 +29,13 @@ enum class PascalTextAttributeKeys(humanName: String, fallback: TextAttributesKe
     COLON("Colon", DefaultLanguageHighlighterColors.DOT),
 
     PARENTHESES("Parentheses", DefaultLanguageHighlighterColors.PARENTHESES),
-    BRACKETS("Brackets", DefaultLanguageHighlighterColors.BRACKETS),
 
-    ASSIGNMENTS("Signs", DefaultLanguageHighlighterColors.DOT),
-    SPECIFIC_SYMBOLS("Specific symbols", DefaultLanguageHighlighterColors.DOT),
     OPERATORS("Mathematical operations", DefaultLanguageHighlighterColors.OPERATION_SIGN),
     KEYWORD("Keyword", DefaultLanguageHighlighterColors.KEYWORD),
     TYPES("Variables types", DefaultLanguageHighlighterColors.LABEL),
 
-    PROCEDURES("Contract Procedure", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
+    IDENTIFIER("Identifier", DefaultLanguageHighlighterColors.IDENTIFIER),
+    PROCEDURES("Procedure or function", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
 	
 	val key = TextAttributesKey.createTextAttributesKey("Pascal.$name", fallback)
     val descriptor = AttributesDescriptor(humanName, key)
@@ -67,30 +64,29 @@ class PascalSyntaxHighlighter : SyntaxHighlighterBase() {
         init
         {
             fillMap(keys1, PascalTokenType.KEYWORDS, PascalTextAttributeKeys.KEYWORD.key)
-            fillMap(keys1, PascalTokenType.ASSIGNMENTS, PascalTextAttributeKeys.ASSIGNMENTS.key)
-            fillMap(keys1, PascalTokenType.OPERATORS, PascalTextAttributeKeys.OPERATORS.key)
-            fillMap(keys1, PascalTokenType.SPECIFIC_SYMBOLS, PascalTextAttributeKeys.SPECIFIC_SYMBOLS.key)
             fillMap(keys1, PascalTokenType.PROCEDURES, PascalTextAttributeKeys.PROCEDURES.key)
+
             fillMap(keys1, PascalTokenType.TYPES, PascalTextAttributeKeys.TYPES.key)
 
+            fillMap(keys1, PascalTokenType.SIMPLE_EXPRESSION_OPERATORS, PascalTextAttributeKeys.OPERATORS.key)
+            fillMap(keys1, PascalTokenType.TERM_OPERATORS, PascalTextAttributeKeys.OPERATORS.key)
+            fillMap(keys1, PascalTokenType.FACTOR_OPERATORS, PascalTextAttributeKeys.OPERATORS.key)
+            fillMap(keys1, PascalTokenType.ASSIGNMENTS, PascalTextAttributeKeys.OPERATORS.key)
 
-            keys1[PascalTokenType.INT] = PascalTextAttributeKeys.INT.key
-            keys1[PascalTokenType.HEX] = PascalTextAttributeKeys.HEX.key
+
             keys1[PascalTokenType.STRING] = PascalTextAttributeKeys.STRING.key
+            keys1[PascalTokenType.UNSIGNED_INTEGER] = PascalTextAttributeKeys.INT.key
+            keys1[PascalTokenType.IDENTIFIER] = PascalTextAttributeKeys.IDENTIFIER.key
 
             keys1[PascalTokenType.COMMENT] = PascalTextAttributeKeys.COMMENT.key
 
+            keys1[PascalTokenType.NOT] = PascalTextAttributeKeys.KEYWORD.key
+            keys1[PascalTokenType.DOT] = PascalTextAttributeKeys.DOT.key
+            keys1[PascalTokenType.COMMA] = PascalTextAttributeKeys.COMMA.key
             keys1[PascalTokenType.LPAREN] = PascalTextAttributeKeys.PARENTHESES.key
             keys1[PascalTokenType.RPAREN] = PascalTextAttributeKeys.PARENTHESES.key
-
-            keys1[PascalTokenType.LBRACKET] = PascalTextAttributeKeys.BRACKETS.key
-            keys1[PascalTokenType.RBRACKET] = PascalTextAttributeKeys.BRACKETS.key
-
-            keys1[PascalTokenType.COMMA] = PascalTextAttributeKeys.COMMA.key
-            keys1[PascalTokenType.DOT] = PascalTextAttributeKeys.DOT.key
-            keys1[PascalTokenType.SEMICOLON] = PascalTextAttributeKeys.SEMICOLON.key
-
             keys1[PascalTokenType.COLON] = PascalTextAttributeKeys.COLON.key
+            keys1[PascalTokenType.SEMICOLON] = PascalTextAttributeKeys.SEMICOLON.key
         }
     }
 

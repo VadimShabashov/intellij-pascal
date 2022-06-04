@@ -11,6 +11,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="Pascal" language="Pascal" implementationClass="com.itmo.pascal.lang.PascalFileType" extensions="pas" fieldName="INSTANCE"/>
+        <lang.parserDefinition language="Pascal" implementationClass="com.itmo.pascal.lang.PascalParserDefinition"/>
 		
 		
         <lang.syntaxHighlighterFactory language="Pascal" implementationClass="com.itmo.pascal.ide.PascalSyntaxHighlighterFactory"/>
