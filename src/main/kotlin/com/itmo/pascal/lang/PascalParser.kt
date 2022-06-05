@@ -306,7 +306,7 @@ class PascalParser : PsiParser {
         private fun parseClause() {
             val mark = builder.mark()
 
-            expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+            parseIdentifier()
             if (builder.tokenType == PascalTokenType.IN) {
                 expectAdvance(PascalTokenType.IN, "IN")
                 expectAdvance(PascalTokenType.STRING, "STRING")
@@ -351,7 +351,7 @@ class PascalParser : PsiParser {
             val mark = builder.mark()
 
             expectAdvance(PascalTokenType.FUNCTION, "FUNCTION")
-            expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+            parseIdentifier()
 
             expectAdvance(PascalTokenType.LPAREN, "(")
             parseFunctionVariableList()
@@ -370,7 +370,7 @@ class PascalParser : PsiParser {
         private fun parseFunctionVariable() {
             val mark = builder.mark()
 
-            expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+            parseIdentifier()
             expectAdvance(PascalTokenType.COLON, ":")
             parseType()
 
@@ -389,7 +389,7 @@ class PascalParser : PsiParser {
             val mark = builder.mark()
 
             expectAdvance(PascalTokenType.PROCEDURE, "PROCEDURE")
-            expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+            parseIdentifier()
             expectAdvance(PascalTokenType.SEMICOLON, ";")
 
             parseBlock()
@@ -446,7 +446,7 @@ class PascalParser : PsiParser {
         private fun parseVariableDeclaration() {
             val mark = builder.mark()
 
-            expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+            parseIdentifier()
             expectAdvance(PascalTokenType.COLON, ":")
             parseType()
             if (builder.tokenType == PascalTokenType.EQ) {
@@ -576,7 +576,7 @@ class PascalParser : PsiParser {
 
             when (builder.tokenType) {
                 PascalTokenType.IDENTIFIER -> {
-                    expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+                    parseIdentifier()
                     if (builder.tokenType == PascalTokenType.LPAREN) {
                         parseParameterList()
                     }
@@ -704,7 +704,7 @@ class PascalParser : PsiParser {
             val mark = builder.mark()
 
             expectAdvance(PascalTokenType.FOR, "FOR")
-            expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+            parseIdentifier()
             expectAdvance(PascalTokenType.ASSIGN, ":=")
             parseExpression()
 
@@ -769,7 +769,7 @@ class PascalParser : PsiParser {
 
             when (builder.tokenType) {
                 PascalTokenType.IDENTIFIER -> {
-                    expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+                    parseIdentifier()
                 }
                 PascalTokenType.UNSIGNED_INTEGER -> {
                     expectAdvance(PascalTokenType.UNSIGNED_INTEGER, "UNSIGNED_INTEGER")
@@ -804,7 +804,7 @@ class PascalParser : PsiParser {
         private fun parseAssignment() {
             val mark = builder.mark()
 
-            expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+            parseIdentifier()
             when (builder.tokenType) {
                 PascalTokenType.ASSIGN -> {
                     expectAdvance(PascalTokenType.ASSIGN, ":=")
@@ -833,7 +833,7 @@ class PascalParser : PsiParser {
         private fun parseProcedureStatement() {
             val mark = builder.mark()
 
-            expectAdvance(PascalTokenType.IDENTIFIER, "IDENTIFIER")
+            parseIdentifier()
             if (builder.tokenType == PascalTokenType.LPAREN) {
                 parseParameterList()
             }

@@ -62,7 +62,7 @@ class PascalElementType(@NonNls debugName: String) : IElementType(debugName, Pas
                 PROGRAM_HEADER -> PascalSimpleNode(node)
                 USES_CLAUSE -> PascalSimpleNode(node)
                 PROGRAM_PARAMETERS -> PascalSimpleNode(node)
-                IDENTIFIER -> PascalSimpleNode(node)
+                IDENTIFIER -> PascalRefIdentifier(node)
                 CLAUSE -> PascalSimpleNode(node)
 
                 BLOCK -> PascalSimpleNode(node)

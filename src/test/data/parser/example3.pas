@@ -10,18 +10,17 @@ length : REAL;
 
 FUNCTION f(a : INTEGER) : CHAR;
 BEGIN
-   IF a = 6 THEN b := 7
+   IF a = 6 THEN Writeln(cat)
 END;
 
 FUNCTION h(a : INTEGER; b : REAL) : CHAR;
 BEGIN
    f(9);
-   IF j < 10 THEN f(9) ELSE f(0)
+   IF a < 10 THEN f(b) ELSE f(b)
 END;
 
 BEGIN
-    f(8, 9);
-    Writeln('cats');
+    f(8);
 
     FOR i := 1 TO 10
     DO BEGIN
@@ -31,7 +30,7 @@ BEGIN
 
     FOR i := 10 DOWNTO 1
     DO REPEAT
-            h('cats');
-            a += 7 * 9 AND 10
+            h(age, length);
+            dog := NOT dog
        UNTIL g <= 1
 END.

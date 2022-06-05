@@ -19,4 +19,14 @@ abstract class PascalPsiElement(node: ASTNode) : ASTWrapperPsiElement(node) {
 	override fun getContainingFile(): PascalFile? = super.getContainingFile() as? PascalFile
 }
 
+// Простая нода без имени
 class PascalSimpleNode(node: ASTNode) : PascalPsiElement(node) {}
+
+// Ниже будет именная нода для референсов
+interface PascalNamedElement : PsiElement
+
+abstract class PascalNamedPsiElement(node: ASTNode) : PascalPsiElement(node), PascalNamedElement {
+	override fun getName(): String = node.text
+}
+
+class PascalNamedNode(node: ASTNode) : PascalNamedPsiElement(node) {}

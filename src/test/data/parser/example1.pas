@@ -1,6 +1,6 @@
 PROGRAM Example1(i1, i2);
 
-LABEL a, b;
+LABEL a, b, c;
 
 BEGIN
     IF (a = 0)
