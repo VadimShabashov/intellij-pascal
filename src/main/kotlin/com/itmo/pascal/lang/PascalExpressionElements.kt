@@ -5,37 +5,69 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
 
 
+/**
+ * Все переменные, функции и процедуры обязаны быть объявлены в начале файла, поэтому для референса достаточно найти их
+ * объявления в DECLARATION_PART
+ */
 class PascalRefIdentifier(node: ASTNode) : PascalPsiElement(node) {
-	private fun findDeclarations() : ASTNode? {
-		var parent = node.treeParent
-		while (parent != null) {
-			if (parent.elementType == PascalElementType.BLOCK) {
-				break
-			} else {
-				parent = parent.treeParent
-			}
+	private fun findFileNode() :ASTNode {
+		var parent = node
+		while (parent.treeParent != null) {
+			parent = parent.treeParent
 		}
 
-		if (parent != null) {
-			return parent.findChildByType(PascalElementType.DECLARATION_PART)
-		} else {
-			return null
-		}
+		return parent
+	}
+
+	private fun findDeclarations() : ASTNode? {
+		var tempNode = findFileNode()
+		tempNode = tempNode.findChildByType(PascalElementType.BLOCK) ?: return null
+		return tempNode.findChildByType(PascalElementType.DECLARATION_PART)
 	}
 
 	private fun lookInDeclaredEntities(declarations: ASTNode) : ASTNode? {
-		var identifier: ASTNode?
+		var identifier: ASTNode? = null
 
 		for (declaredEntity in declarations.getChildren(null)) {
-			for (child in declaredEntity.getChildren(null)) {
-				identifier = child.findChildByType(PascalElementType.IDENTIFIER)
-				if (identifier != null && identifier.text == node.text) {
-					return identifier
-				}
+			when (declaredEntity.elementType) {
+				PascalElementType.VARIABLE_DECLARATION_PART ->
+					identifier = lookInDeclaredVars(declaredEntity)
+				PascalElementType.PROCEDURE_DECLARATION ->
+					identifier = lookInDeclaredFunctionsOrProcedures(declaredEntity)
+				PascalElementType.FUNCTION_DECLARATION ->
+					identifier = lookInDeclaredFunctionsOrProcedures(declaredEntity)
+			}
+
+			if (identifier != null) {
+				return identifier
 			}
 		}
 
 		return null
+	}
+
+	private fun lookInDeclaredVars(varsDeclaration: ASTNode) : ASTNode? {
+		var identifier: ASTNode?
+
+		for (child in varsDeclaration.getChildren(null)) {
+			identifier = child.findChildByType(PascalElementType.IDENTIFIER)
+
+			if (identifier != null && identifier.text == node.text) {
+				return identifier
+			}
+		}
+
+		return null
+	}
+
+	private fun lookInDeclaredFunctionsOrProcedures(functionDeclaration: ASTNode) : ASTNode? {
+		val identifier: ASTNode = functionDeclaration.findChildByType(PascalElementType.IDENTIFIER) ?: return null
+
+		if (identifier.text == node.text) {
+			return identifier
+		} else {
+			return null
+		}
 	}
 
 	override fun getReference(): PsiReferenceBase<PascalRefIdentifier>? {
@@ -43,7 +75,7 @@ class PascalRefIdentifier(node: ASTNode) : PascalPsiElement(node) {
 		val ref = node.psi
 		val rangeInElement = ref.textRangeInParent.shiftRight(ref.startOffsetInParent)
 
-		// Идем по дереву до BLOCK, в котором считаем, что содержатся все определения
+		// Находим в дереве BLOCK, в котором содержатся все определения
 		val declarations = findDeclarations() ?: return null
 
 		// Ищем определение в определениях

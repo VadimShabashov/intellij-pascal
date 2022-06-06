@@ -27,7 +27,6 @@ class PascalTokenType(@NonNls debugName: String) : IElementType(debugName, Pasca
         val FUNCTION = PascalTokenType("FUNCTION")
         val IF = PascalTokenType("IF")
         val IN = PascalTokenType("IN")
-        val LABEL = PascalTokenType("LABEL")
         val MOD = PascalTokenType("MOD")
         val NOT = PascalTokenType("NOT")
         val OR = PascalTokenType("OR")
@@ -47,6 +46,9 @@ class PascalTokenType(@NonNls debugName: String) : IElementType(debugName, Pasca
         val REAL = PascalTokenType("REAL")
         val BOOLEAN = PascalTokenType("BOOLEAN")
         val CHAR = PascalTokenType("CHAR")
+
+        val TRUE = PascalTokenType("TRUE")
+        val FALSE = PascalTokenType("FALSE")
 
         val IDENTIFIER = PascalTokenType("IDENTIFIER")
 
@@ -74,10 +76,11 @@ class PascalTokenType(@NonNls debugName: String) : IElementType(debugName, Pasca
         val ASTERISK_ASSIGN = PascalTokenType("ASTERISK_ASSIGN")
         val DIVIDE_ASSIGN = PascalTokenType("DIVIDE_ASSIGN")
 
-        val KEYWORDS = TokenSet.create(DO, DOWNTO, ELSE, FOR, IF, IN, LABEL,
+        val KEYWORDS = TokenSet.create(DO, DOWNTO, ELSE, FOR, IF, IN,
             PROGRAM, REPEAT, THEN, TO, UNTIL, USES, VAR, WHILE)
         val PROCEDURES = TokenSet.create(PROCEDURE, FUNCTION, BEGIN, END)
 
+        val BOOLEANS = TokenSet.create(TRUE, FALSE)
 
         val TYPES = TokenSet.create(INTEGER, REAL, BOOLEAN, CHAR)
 

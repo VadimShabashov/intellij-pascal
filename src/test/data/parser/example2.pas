@@ -1,5 +1,8 @@
 PROGRAM Example2();
 
+VAR
+s : INTEGER;
+
 PROCEDURE f;
 BEGIN
   Writeln ('First');

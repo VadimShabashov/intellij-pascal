@@ -25,7 +25,6 @@ class PascalElementType(@NonNls debugName: String) : IElementType(debugName, Pas
         val STATEMENT_PART = PascalElementType("STATEMENT_PART")
         val COMPOUND_STATEMENT = PascalElementType("COMPOUND_STATEMENT")
 
-        val LABEL_DECLARATION_PART = PascalElementType("LABEL_DECLARATION_PART")
         val VARIABLE_DECLARATION_PART = PascalElementType("VARIABLE_DECLARATION_PART")
         val VARIABLE_DECLARATION = PascalElementType("VARIABLE_DECLARATION")
         val STATEMENT = PascalElementType("STATEMENT")
@@ -39,8 +38,6 @@ class PascalElementType(@NonNls debugName: String) : IElementType(debugName, Pas
 
         val FACTOR = PascalElementType("FACTOR")
         val FACTOR_OPERATOR = PascalElementType("FACTOR_OPERATOR")
-
-        val LABEL = PascalElementType("LABEL")
 
         val PARAMETER_LIST = PascalElementType("PARAMETER_LIST")
         val UNSIGNED_CONSTANT = PascalElementType("UNSIGNED_CONSTANT")
@@ -70,7 +67,6 @@ class PascalElementType(@NonNls debugName: String) : IElementType(debugName, Pas
                 STATEMENT_PART -> PascalSimpleNode(node)
                 COMPOUND_STATEMENT -> PascalSimpleNode(node)
 
-                LABEL_DECLARATION_PART -> PascalSimpleNode(node)
                 VARIABLE_DECLARATION_PART -> PascalSimpleNode(node)
                 VARIABLE_DECLARATION -> PascalSimpleNode(node)
                 STATEMENT -> PascalSimpleNode(node)
@@ -84,8 +80,6 @@ class PascalElementType(@NonNls debugName: String) : IElementType(debugName, Pas
 
                 FACTOR -> PascalSimpleNode(node)
                 FACTOR_OPERATOR -> PascalSimpleNode(node)
-
-                LABEL -> PascalSimpleNode(node)
 
                 PARAMETER_LIST -> PascalSimpleNode(node)
                 UNSIGNED_CONSTANT -> PascalSimpleNode(node)

@@ -48,7 +48,6 @@ COMMENT = (\(\*(.|\n)*\*\)|\/\/.*\n|\{(.|\n)*\})
 "FUNCTION"             { return PascalTokenType.Companion.getFUNCTION(); }
 "IF"                   { return PascalTokenType.Companion.getIF(); }
 "IN"                   { return PascalTokenType.Companion.getIN(); }
-"LABEL"                { return PascalTokenType.Companion.getLABEL(); }
 "MOD"                  { return PascalTokenType.Companion.getMOD(); }
 "NOT"                  { return PascalTokenType.Companion.getNOT(); }
 "OR"                   { return PascalTokenType.Companion.getOR(); }
@@ -68,6 +67,9 @@ COMMENT = (\(\*(.|\n)*\*\)|\/\/.*\n|\{(.|\n)*\})
 "REAL"                 { return PascalTokenType.Companion.getREAL(); }
 "BOOLEAN"              { return PascalTokenType.Companion.getBOOLEAN(); }
 "CHAR"                 { return PascalTokenType.Companion.getCHAR(); }
+
+"TRUE"                 { return PascalTokenType.Companion.getTRUE(); }
+"FALSE"                { return PascalTokenType.Companion.getFALSE(); }
 
 {IDENTIFIER}           { return PascalTokenType.Companion.getIDENTIFIER(); }
 

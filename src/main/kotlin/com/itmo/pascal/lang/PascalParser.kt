@@ -46,7 +46,6 @@ import com.intellij.psi.tree.TokenSet
  *   | DECLARATION_PART? STATEMENT_PART
  *
  * DECLARATION_PART:
- *   | LABEL_DECLARATION_PART DECLARATION_PART
  *   | VARIABLE_DECLARATION_PART DECLARATION_PART
  *   | PROCEDURE_DECLARATION_PART DECLARATION_PART
  *   | FUNCTION_DECLARATION_PART DECLARATION_PART
@@ -80,17 +79,6 @@ import com.intellij.psi.tree.TokenSet
  *   | 'BOOLEAN'
  *   | 'CHAR'
  *
- * LABEL_DECLARATION_PART:
- *   | 'LABEL' LABEL_DECLARATION_LIST ';'
- *
- * LABEL_DECLARATION_LIST:
- *   | LABEL_DECLARATION ',' LABEL_DECLARATION_LIST
- *   | LABEL_DECLARATION
- *
- * LABEL_DECLARATION:
- *   | IDENTIFIER
- *   | UNSIGNED_INTEGER
- *
  * STATEMENT_PART:
  *   | COMPOUND_STATEMENT
  *
@@ -102,14 +90,8 @@ import com.intellij.psi.tree.TokenSet
  *   | STATEMENT
  *
  * STATEMENT:
- *   | LABEL ':' SIMPLE_STATEMENT
- *   | LABEL ':' STRUCTURED_STATEMENT
  *   | SIMPLE_STATEMENT
  *   | STRUCTURED_STATEMENT
- *
- * LABEL:
- *   | IDENTIFIER
- *   | UNSIGNED_INTEGER
  *
  * SIMPLE_STATEMENT:
  *   | ASSIGNMENT_STATEMENT
@@ -198,6 +180,7 @@ import com.intellij.psi.tree.TokenSet
  *   | 'NOT' FACTOR
  *   | SIGN FACTOR
  *   | UNSIGNED_CONSTANT
+ *   | BOOL
  *
  * VARIABLE_REFERENCE:
  *   | IDENTIFIER
@@ -332,11 +315,10 @@ class PascalParser : PsiParser {
                 flag = true
 
                 when (builder.tokenType) {
-                    PascalTokenType.LABEL -> parseLabelDeclarationPart()
                     PascalTokenType.VAR -> parseVariableDeclarationPart()
                     PascalTokenType.FUNCTION -> parseFunctionDeclaration()
                     PascalTokenType.PROCEDURE -> parseProcedureDeclaration()
-                    else -> errorAdvance("LABEL, VAR, FUNCTION, PROCEDURE")
+                    else -> errorAdvance("VAR, FUNCTION, PROCEDURE")
                 }
             }
 
@@ -396,25 +378,6 @@ class PascalParser : PsiParser {
             expectAdvance(PascalTokenType.SEMICOLON, ";")
 
             mark.done(PascalElementType.PROCEDURE_DECLARATION)
-        }
-
-        private fun parseLabelDeclarationPart() {
-            val mark = builder.mark()
-
-            expectAdvance(PascalTokenType.LABEL, "LABEL")
-            parseLabelDeclarationList()
-
-            expectAdvance(PascalTokenType.SEMICOLON, ";")
-
-            mark.done(PascalElementType.LABEL_DECLARATION_PART)
-        }
-
-        private fun parseLabelDeclarationList() {
-            parseLabel()
-            while (builder.tokenType == PascalTokenType.COMMA) {
-                expectAdvance(PascalTokenType.COMMA, ",")
-                parseLabel()
-            }
         }
 
         private fun parseVariableDeclarationPart() {
@@ -571,6 +534,17 @@ class PascalParser : PsiParser {
             mark.done(PascalElementType.FACTOR_OPERATOR)
         }
 
+        private fun parseBool() {
+            when (builder.tokenType) {
+                PascalTokenType.TRUE -> {
+                    expectAdvance(PascalTokenType.TRUE, "TRUE")
+                }
+                PascalTokenType.FALSE -> {
+                    expectAdvance(PascalTokenType.FALSE, "FALSE")
+                }
+            }
+        }
+
         private fun parseFactor() {
             val mark = builder.mark()
 
@@ -580,6 +554,9 @@ class PascalParser : PsiParser {
                     if (builder.tokenType == PascalTokenType.LPAREN) {
                         parseParameterList()
                     }
+                }
+                in PascalTokenType.BOOLEANS -> {
+                    parseBool()
                 }
                 PascalTokenType.NOT -> {
                     expectAdvance(PascalTokenType.NOT, "NOT")
@@ -662,11 +639,6 @@ class PascalParser : PsiParser {
 
         private fun parseStatement() {
             val mark = builder.mark()
-
-            if (builder.lookAhead(1) == PascalTokenType.COLON) {
-                parseLabel()
-                expectAdvance(PascalTokenType.COLON, ":")
-            }
 
             if (!tryParseStructuredStatement()) {
                 parseSimpleStatement()
@@ -762,24 +734,6 @@ class PascalParser : PsiParser {
             parseExpression()
 
             mark.done(PascalElementType.REPEAT_STATEMENT)
-        }
-
-        private fun parseLabel() {
-            val mark = builder.mark()
-
-            when (builder.tokenType) {
-                PascalTokenType.IDENTIFIER -> {
-                    parseIdentifier()
-                }
-                PascalTokenType.UNSIGNED_INTEGER -> {
-                    expectAdvance(PascalTokenType.UNSIGNED_INTEGER, "UNSIGNED_INTEGER")
-                }
-                else -> {
-                    builder.error("IDENTIFIER or UNSIGNED_INTEGER")
-                }
-            }
-
-            mark.done(PascalElementType.LABEL)
         }
 
         private fun parseSimpleStatement() {

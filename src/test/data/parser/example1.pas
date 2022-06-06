@@ -1,6 +1,9 @@
 PROGRAM Example1(i1, i2);
 
-LABEL a, b, c;
+VAR
+a : BOOLEAN = TRUE;
+b : INTEGER = 2;
+c : INTEGER;
 
 BEGIN
     IF (a = 0)

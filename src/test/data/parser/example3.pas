@@ -7,6 +7,9 @@ age : INTEGER;
 cat : CHAR = 'c';
 dog : BOOLEAN = 1;
 length : REAL;
+a : INTEGER;
+b : INTEGER;
+i : INTEGER;
 
 FUNCTION f(a : INTEGER) : CHAR;
 BEGIN

@@ -34,6 +34,8 @@ enum class PascalTextAttributeKeys(humanName: String, fallback: TextAttributesKe
     KEYWORD("Keyword", DefaultLanguageHighlighterColors.KEYWORD),
     TYPES("Variables types", DefaultLanguageHighlighterColors.LABEL),
 
+    BOOLEANS("Variables types", DefaultLanguageHighlighterColors.NUMBER),
+
     IDENTIFIER("Identifier", DefaultLanguageHighlighterColors.IDENTIFIER),
     PROCEDURES("Procedure or function", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
 	
@@ -67,6 +69,7 @@ class PascalSyntaxHighlighter : SyntaxHighlighterBase() {
             fillMap(keys1, PascalTokenType.PROCEDURES, PascalTextAttributeKeys.PROCEDURES.key)
 
             fillMap(keys1, PascalTokenType.TYPES, PascalTextAttributeKeys.TYPES.key)
+            fillMap(keys1, PascalTokenType.BOOLEANS, PascalTextAttributeKeys.BOOLEANS.key)
 
             fillMap(keys1, PascalTokenType.SIMPLE_EXPRESSION_OPERATORS, PascalTextAttributeKeys.OPERATORS.key)
             fillMap(keys1, PascalTokenType.TERM_OPERATORS, PascalTextAttributeKeys.OPERATORS.key)
